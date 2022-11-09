@@ -25,10 +25,37 @@ def one_shoe(id):
     else:
         return {'error': f'shoe not found with id {id}'}, 404
 
+@shoes_bp.route('/<int:id>/', methods=['DELETE'])
+def delete_one_shoe(id):
+    stmt = db.select(Shoe).filter_by(id=id)
+    shoe = db.session.scalar(stmt)
+    if shoe:
+        db.session.delete(shoe)
+        db.session.commit()
+        return {'message': f'Shoe "{shoe.name}" deleted successfully'} 
+    else:
+        return {'error': f'Shoe not found with id {id}'}, 404
+
+@shoes_bp.route('/<int:id>/', methods=['PUT', 'PATCH'])
+def update_one_shoe(id):
+    stmt = db.select(Shoe).filter_by(id=id)
+    shoe = db.session.scalar(stmt)
+    if shoe:
+        shoe.brand = request.json.get('brand') or shoe.brand
+        shoe.name = request.json.get('name') or shoe.name
+        shoe.description = request.json.get('description') or shoe.description
+        shoe.release_date = request.json.get('release_date') or shoe.release_date
+        shoe.condition_id =request.json.get('condition_id') or shoe.condition_id
+        shoe.size_id =request.json.get('size_id') or shoe.size_id
+        db.session.commit()
+        return ShoeSchema().dump(shoe)
+    else:
+        return {'error': f'shoe not found with id {id}'}, 404
+
 @shoes_bp.route('/', methods=['POST']) # POST for creation
 # @jwt_required()
 def create_shoe():
-    # create a new card model instance
+    # create a new shoe model instance
     shoe = Shoe(
         brand = request.json['brand'],
         name = request.json['name'],
@@ -36,7 +63,7 @@ def create_shoe():
         release_date = request.json['release_date'],
         condition_id =request.json['condition_id'],
         size_id =request.json['size_id']
-        )    # Add and commit user to DB
+        )    
     db.session.add(shoe)
     db.session.commit()
     # Return the user to check the request was successful
