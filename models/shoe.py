@@ -1,6 +1,7 @@
 from init import ma, db
 from marshmallow import fields
 
+
 class Shoe(db.Model):
     __tablename__ = 'shoes'
 
@@ -8,6 +9,12 @@ class Shoe(db.Model):
     brand = db.Column(db.String(100))
     name = db.Column(db.String)
     description = db.Column( db.Text)
+    release_date = db.Column(db.Date)
 
     condition_id = db.Column(db.Integer)
     size_id = db.Column(db.Integer)
+
+class ShoeSchema(ma.Schema):
+    class Meta:
+        fields = ('id', 'brand', 'name', 'description', 'release_date', 'condition', 'size')
+        ordered = True
