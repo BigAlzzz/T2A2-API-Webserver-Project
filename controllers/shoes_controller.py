@@ -32,7 +32,7 @@ def delete_one_shoe(id):
     if shoe:
         db.session.delete(shoe)
         db.session.commit()
-        return {'message': f'Shoe "{shoe.name}" deleted successfully'} 
+        return {'message': f"Shoe '{shoe.name}' deleted successfully"} 
     else:
         return {'error': f'Shoe not found with id {id}'}, 404
 
