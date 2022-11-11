@@ -1,6 +1,10 @@
 from flask import Blueprint, request
 from init import db
-from models.shoe import Shoe, ShoeSchema
+from models.user_shoe import Shoe
+from models.shoe import ShoeSchema
+from models.user import UserSchema
+from controllers.auth_controller import authorize
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 shoes_bp = Blueprint('shoes', __name__, url_prefix='/shoes')
 
@@ -16,17 +20,30 @@ def all_shoes():
     shoes = db.session.scalars(stmt)
     return ShoeSchema(many=True).dump(shoes)
 
+
+
 @shoes_bp.route('/<int:id>/')
 def one_shoe(id):
     stmt = db.select(Shoe).filter_by(id=id)
     shoe = db.session.scalar(stmt)
+    print(shoe.condition)
     if shoe:
         return ShoeSchema().dump(shoe)
     else:
         return {'error': f'shoe not found with id {id}'}, 404
 
+
+# @shoes_bp.route('/<int:id>/users')
+# def one_shoe(id):
+#     stmt = db.select(Shoe).filter_by(id=id)
+#     shoe = db.session.scalar(stmt)
+#     return UserSchema(many=True).dump(shoe.users)
+
+
 @shoes_bp.route('/<int:id>/', methods=['DELETE'])
+@jwt_required()
 def delete_one_shoe(id):
+    authorize() #for admin
     stmt = db.select(Shoe).filter_by(id=id)
     shoe = db.session.scalar(stmt)
     if shoe:
@@ -37,6 +54,7 @@ def delete_one_shoe(id):
         return {'error': f'Shoe not found with id {id}'}, 404
 
 @shoes_bp.route('/<int:id>/', methods=['PUT', 'PATCH'])
+@jwt_required()
 def update_one_shoe(id):
     stmt = db.select(Shoe).filter_by(id=id)
     shoe = db.session.scalar(stmt)
@@ -53,7 +71,7 @@ def update_one_shoe(id):
         return {'error': f'shoe not found with id {id}'}, 404
 
 @shoes_bp.route('/', methods=['POST']) # POST for creation
-# @jwt_required()
+@jwt_required()  
 def create_shoe():
     # create a new shoe model instance
     shoe = Shoe(
