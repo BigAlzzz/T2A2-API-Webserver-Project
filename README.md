@@ -2,10 +2,11 @@
 ### Sneaker Inventory
 ----------------------------------------------------------------
 #### Link to Github repo:
+[Github Repo](https://github.com/BigAlzzz/T2A2-API-Webserver-Project)
 
 ---
 #### R1
-There is a vast sneaker community in Australia. Through web research some gaps were identified in the snaker space, there doesn’t seem to be an application/platform where users are able to keep stock of their sneaker collection, users are also unable to share their collection collectively and a space where users are able to comment on other user’s sneaker/collection. The goal is to incorporate these into an application.
+There is a vast sneaker community in Australia. Through web research some gaps were identified in the sneaker space, there doesn’t seem to be an application/platform where users are able to keep stock of their sneaker collection, users are also unable to share their collection collectively and a space where users are able to comment on other user’s sneaker/collection. The goal is to incorporate these into an application.
 
 ---
 #### R2
@@ -85,6 +86,7 @@ Seen in the ERD, there are 4 main entities and 1 join table. The entities are Us
 
 ---
 #### R10
+<img src="img/trello.jpg" alt="ERD"/>
 A Trello board was used to track the task needed throughout the project.
 The aspects of the project were broken down to task that needed to be done and tracked across doing and done.
 The link to my trello board is here
